@@ -9,15 +9,6 @@
 	$asal_kab = $_POST['asal_kab'];
 	$tgllahir = $_POST['tgllahir'];
 	$thnlulus = $_POST['thnlulus'];
-	echo $username;
-	echo $pass;
-	echo $konfirmpass;
-	echo $namalengkap;
-	echo $jenkel;
-	echo $asal_prov;
-	echo $asal_kab;
-	echo $tgllahir;
-	echo $thnlulus;
 	if ($pass == $konfirmpass){
 		$u = mysqli_query($conn, "SELECT * FROM user where namauser='".$username."'");
 		if ($u->num_rows == 0)

@@ -3,6 +3,35 @@
     include("session.php");
     include("db.php");
     $id = $_POST['id'];
+    $msgStat = 0;
+    $doUpload = $_POST['doUpload'];
+    if ($doUpload == 1) {
+        $username = $_POST['username'];
+        $pass = $_POST['pass'];
+        $konfirmpass = $_POST['konfirmpass'];
+        $namalengkap = $_POST['namalengkap'];
+        $jenkel = $_POST['jenkel'];
+        $asal_prov = $_POST['asal_prov'];
+        $asal_kab = $_POST['asal_kab'];
+        $tgllahir = $_POST['tgllahir'];
+        $thnlulus = $_POST['thnlulus'];
+        if ($pass == $konfirmpass){
+            $u = mysqli_query($conn, "UPDATE alumni SET namalengkap='".$namalengkap."', jenkel=".$jenkel.", asal_prov='".$asal_prov."', asal_kab='".$asal_kab."', tgllahir='".$tgllahir."', thnlulus=".$thnlulus." WHERE idalumni=".$id."");
+            $v = mysqli_query($conn, "SELECT user_iduser FROM alumni WHERE idalumni=".$id);
+            $v = mysqli_fetch_row($v);
+            if ($pass != NULL){
+                $w = mysqli_query($conn, "UPDATE user SET namauser='".$username."', passuser='".$pass."' WHERE iduser=".$v[0]);
+            }
+            else $w = mysqli_query($conn, "UPDATE user SET namauser='".$username."' WHERE iduser=".$v[0]);
+            $msgStat = 1;
+            $msgContent = "Perubahan berhasil disimpan.";
+        }
+        else {
+            $msgStat = -1;
+            $msgContent = "Password dan konfirmasi password tidak sesuai.";
+        }
+    }
+
     $u = mysqli_query($conn, "SELECT * FROM user, alumni WHERE alumni.idalumni=".$id." AND alumni.user_iduser=user.iduser");
     $u = mysqli_fetch_row($u);
 ?>
@@ -27,7 +56,19 @@
                                     <div class="alert alert-warning">
                                         <strong>Perhatian!</strong> Anda hanya bisa mengubah profil dasar alumni. Data lainnya seperti kontak dan alamat hanya bisa diubah oleh alumni yang bersangkutan.
                                     </div>
-                                    <form class="form-horizontal row-fluid">
+                                    <?php if ($msgStat == 1) {?>
+                                    <div class="alert alert-success">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong>Berhasil!</strong> <?php echo $msgContent; ?> 
+                                    </div>
+                                    <?php } ?>
+                                    <?php if ($msgStat == -1) {?>
+                                    <div class="alert alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong>Perubahan gagal dilakukan!</strong> <?php echo $msgContent; ?> 
+                                    </div>
+                                    <?php } ?>
+                                    <form id="mainForm" class="form-horizontal row-fluid" action="adminsuntingalumni.php" method="POST">
                                         <div class="control-group">
                                             <label class="control-label" for="basicinput">Username</label>
                                             <div class="controls">
@@ -57,8 +98,8 @@
                                             <div class="controls">
                                                 <select id="jenkel" name="jenkel" class="span6">
                                                     <option>--Pilih Salah Satu--</option>
-                                                    <option <?php if ($u[7] == 0) echo "selected"; ?>>Laki-laki</option>
-                                                    <option <?php if ($u[7] == 1) echo "selected"; ?>>Perempuan</option>
+                                                    <option <?php if ($u[7] == 0) echo "selected"; ?> value="0">Laki-laki</option>
+                                                    <option <?php if ($u[7] == 1) echo "selected"; ?> value="1">Perempuan</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -131,8 +172,12 @@
                                         </div>
                                         <div class="control-group">
                                             <div class="controls">
+                                                
                                                 <button type="button" id="basicinput" class="btn btn-danger btn-large" data-toggle="modal" data-target="#myModal2" data-backdrop="static">Batal</button>
                                                 <button type="button" id="basicinput" class="btn btn-success btn-large" data-toggle="modal" data-target="#myModal" data-backdrop="static">Simpan</button>
+                                            </div>
+                                            <div class="controls" style="margin-top:15px;">
+                                                <a class="btn btn-danger" href="adminlihat.php">Kembali ke Halaman Kelola Daftar Alumni</a>
                                             </div>
                                         </div>
                                     
@@ -151,8 +196,10 @@
                                                 </h5>
                                               </div>
                                               <div class="modal-footer">
+                                                <input type="hidden" id="id" name="id" value="<?php echo $id; ?>">
+                                                <input type="hidden" id="doUpload" name="doUpload" value="1">
                                                 <button type="button" class="btn btn-danger btn-large" data-dismiss="modal">Tidak</button>
-                                                <a type="button" class="btn btn-success btn-large" href="adminsuntingalumni-sukses.html">Ya. Simpan Perubahan</a>
+                                                <a class="btn btn-success btn-large" onclick="document.getElementById('mainForm').submit();">Ya. Simpan Perubahan</a>
                                               </div>
                                             </div>
                                           </div>
@@ -169,17 +216,21 @@
                                               </div>
                                               <div class="modal-body">
                                                 <h5>
-                                                Apakah anda yakin ingin membatalkan perubahan dan meninggalkan halaman ini?
+                                                Apakah anda yakin ingin membatalkan perubahan dan memuat ulang halaman ini?
                                                 </h5>
                                               </div>
                                               <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger btn-large" data-dismiss="modal">Tidak. Tetap di Halaman Ini</button>
-                                                <a type="button" class="btn btn-success btn-large" href="adminlihat.html">Ya</a>
+                                                <a class="btn btn-success btn-large" onclick="document.getElementById('returnForm').submit();">Ya</a>
                                               </div>
                                             </div>
                                           </div>
                                         </div>
                                         <!--modal2-->
+                                    </form>
+                                    <form id="returnForm" action="adminsuntingalumni.php" method="POST" style="float:left; margin-top:5px;">
+                                        <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
+                                        <input type="hidden" id="doUpload" name="doUpload" value="0">
                                     </form>
                                 </div>
                             </div>

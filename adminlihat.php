@@ -2,6 +2,21 @@
     $page="adminlihat"; 
     include("session.php");
     include("db.php"); 
+    $doDelete = !isset($_POST['doDelete']) ? 0 : $_POST['doDelete'];
+    $msgStat = 0;
+    if ($doDelete == 1)
+    {
+        $id = $_POST['id'];
+        $u = mysqli_query($conn, "SELECT user_iduser FROM alumni WHERE idalumni=".$id);
+        $u = mysqli_fetch_row($u);
+        $v = mysqli_query($conn, "DELETE FROM alumni WHERE idalumni=".$id);
+        $w = mysqli_query($conn, "SELECT namauser FROM user WHERE iduser=".$u[0]);
+        $w = mysqli_fetch_row($w);
+        $user = $w[0];
+        $x = mysqli_query($conn, "DELETE FROM user WHERE iduser=".$u[0]);
+        $msgStat = 1;
+        $msgContent = "Data pengguna dengan nama akun <strong><i>".$user."</i></strong> berhasil dihapus.";
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -18,8 +33,16 @@
                         <div class="content">
                             <div class="module">
                                 <div class="module-head">
-                                    <h3>DAFTAR ALUMNI</h3>
+                                    <h3>KELOLA DAFTAR ALUMNI</h3>
                                 </div>
+                                <?php if ($msgStat == 1) {?>
+                                <div style="padding:25px;">
+                                    <div class="alert alert-success">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong>Berhasil!</strong> <?php echo $msgContent; ?> 
+                                    </div>
+                                </div>
+                                <?php } ?>
                                 <div class="module-body">
                                     <table cellpadding="0" cellspacing="0" border="0" class="datatable-1 table table-bordered table-striped	 display"
                                         width="100%">
@@ -73,9 +96,34 @@
                                                     </form>
                                                     <form action="adminsuntingalumni.php" method="POST" style="float:left; margin-right:4px;">
                                                         <input type="hidden" name="id" id="id" value="<?php echo $row[0]; ?>">
+                                                        <input type="hidden" id="doUpload" name="doUpload" value="0">
                                                         <a class="btn btn-warning" onclick="parentNode.submit();" title="Ubah Data Alumni"><b class="icon-pencil"></b></a>
                                                     </form>
-                                                    <a class="btn btn-danger" href="#" title="Hapus Data Alumni" data-toggle="modal" data-target="#myModal" data-backdrop="static"><b class="icon-remove"></b></a>
+                                                    <form id="doForm" action="adminlihat.php" method="POST" style="float:left; margin-right:4px;">
+                                                        <input type="hidden" name="id" id="id" value="<?php echo $row[0]; ?>">
+                                                        <input type="hidden" name="doDelete" id="doDelete" value="1">
+                                                        <a class="btn btn-danger" href="#" title="Hapus Data Alumni" data-toggle="modal" data-target="#myModal" data-backdrop="static"><b class="icon-remove"></b></a>
+                                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                          <div class="modal-dialog">
+                                                            <div class="modal-content">
+                                                              <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                                <h3 class="modal-title" id="myModalLabel">Konfirmasi Penghapusan Data</h3>
+                                                              </div>
+                                                              <div class="modal-body">
+                                                                <h5>
+                                                                Apakah anda yakin ingin menghapus data?
+                                                                </h5>
+                                                              </div>
+                                                              <div class="modal-footer">
+                                                                <button type="button" class="btn btn-danger btn-large" data-dismiss="modal">Tidak. Batalkan Aksi</button>
+                                                                <a type="button" class="btn btn-success btn-large" onclick="document.getElementById('doForm').submit();">Ya</a>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                    </form>
+                                                    
                                                 </td>
                                             </tr>
                                             <?php } ?>
@@ -103,29 +151,6 @@
                                             </tr>
                                         </tfoot>
                                     </table>
-
-                                    <!--modal-->
-                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                          <div class="modal-dialog">
-                                            <div class="modal-content">
-                                              <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h3 class="modal-title" id="myModalLabel">Konfirmasi Penghapusan Data</h3>
-                                              </div>
-                                              <div class="modal-body">
-                                                <h5>
-                                                Apakah anda yakin ingin menghapus data?
-                                                </h5>
-                                              </div>
-                                              <div class="modal-footer">
-                                                <button type="button" class="btn btn-danger btn-large" data-dismiss="modal">Tidak. Batalkan Aksi</button>
-                                                <a type="button" class="btn btn-success btn-large" href="adminlihat-hapus.html">Ya</a>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <!--modal-->
-
                                 </div>
                             </div>
                             <!--/.module-->

@@ -1,4 +1,44 @@
-﻿<?php $page="admintambah"; include("session.php") ?>
+﻿<?php 
+    $page="admintambah"; 
+    include("session.php");
+    include("db.php"); 
+    $doTambah = !isset($_POST['doTambah']) ? 0 : $_POST['doTambah'];
+    $msgStat = 0;
+    if ($doTambah == 1)
+    {
+        $username = $_POST['username'];
+        $pass = $_POST['pass'];
+        $konfirmpass = $_POST['konfirmpass'];
+        $namalengkap = $_POST['namalengkap'];
+        $jenkel = $_POST['jenkel'];
+        $asal_prov = $_POST['asal_prov'];
+        $asal_kab = $_POST['asal_kab'];
+        $tgllahir = $_POST['tgllahir'];
+        $thnlulus = $_POST['thnlulus'];
+        if ($pass == $konfirmpass){
+            $u = mysqli_query($conn, "SELECT * FROM user where namauser='".$username."'");
+            if ($u->num_rows == 0)
+            {
+                $t = mysqli_query($conn, "INSERT INTO user (namauser, passuser, tipeuser) values ('".$username."', '".$pass."',2)");        
+            }   
+            else {
+                $msgStat = -1;
+                $msgContent = "Nama akun <strong><i>".$username."</i></strong> sudah terdaftar sebelumnya. Silakan gunakan nama lain.";
+            }
+        }
+        else {
+            $msgStat = -1;
+            $msgContent = "Password yang dimasukkan tidak sama dengan konfirmasi password.";
+        }
+        if ($msgStat != -1){
+            $u = mysqli_query($conn, "SELECT iduser FROM user where namauser='".$username."'");
+            $u = mysqli_fetch_row($u);
+            mysqli_query($conn, "INSERT INTO alumni (user_iduser, namalengkap, jenkel, asal_prov, asal_kab, tgllahir, thnlulus) values (".$u[0].", '".$namalengkap."',".$jenkel.", '".$asal_prov."', '".$asal_kab."', '".$tgllahir."', ".$thnlulus.")") or die(mysqli_error($conn));            
+            $msgStat = 1;
+            $msgContent = "Data alumni dengan nama akun <strong><i>".$username."</i></strong> berhasil disimpan.";
+        }      
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +58,19 @@
                                     <h3>TAMBAH DATA ALUMNI</h3>
                                 </div>
                                 <div class="module-body">
-                                    <form class="form-horizontal row-fluid" action="admindotambah.php" method="POST">
+                                    <?php if ($msgStat == 1) {?>
+                                    <div class="alert alert-success">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong>Berhasil!</strong> <?php echo $msgContent; ?> 
+                                    </div>
+                                    <?php } ?>
+                                    <?php if ($msgStat == -1) {?>
+                                    <div class="alert alert-danger">
+                                        <button type="button" class="close" data-dismiss="alert">×</button>
+                                        <strong>Gagal menyimpan data baru!</strong> <?php echo $msgContent; ?> 
+                                    </div>
+                                    <?php } ?>
+                                    <form class="form-horizontal row-fluid" action="admintambah.php" method="POST">
                                         <div class="control-group">
                                             <label class="control-label" for="basicinput">Username</label>
                                             <div class="controls">
@@ -47,7 +99,7 @@
                                             <label class="control-label" for="basicinput">Jenis Kelamin</label>
                                             <div class="controls">
                                                 <select id="jenkel" name="jenkel" class="span6">
-                                                    <option>--Pilih Salah Satu--</option>
+                                                    <option value="-1">--Pilih Salah Satu--</option>
                                                     <option value="0">Laki-laki</option>
                                                     <option value="1">Perempuan</option>
                                                 </select>
@@ -57,41 +109,41 @@
                                             <label class="control-label" for="basicinput">Asal Provinsi</label>
                                             <div class="controls">
                                                 <select id="asal_prov" name="asal_prov" class="span6">
-                                                    <option>--Pilih Salah Satu--</option>
-                                                    <option>Nanggroe Aceh Darussalam</option>
-                                                    <option>Sumatra Utara</option>
-                                                    <option>Sumatra Barat</option>
-                                                    <option>Riau</option>
-                                                    <option>Kepulauan Riau</option>
-                                                    <option>Jambi</option>
-                                                    <option>Sumatra Selatan</option>
-                                                    <option>Bengkulu</option>
-                                                    <option>Lampung</option>
-                                                    <option>Bangka Belitung</option>
-                                                    <option>DKI Jakarta</option>
-                                                    <option>Jawa Barat</option>
-                                                    <option>Banten</option>
-                                                    <option>Jawa Tengah</option>
-                                                    <option>Daerah Istimewa Yogyakarta (DIY)</option>
-                                                    <option>Jawa Timur</option>
+                                                    <option value="-1">--Pilih Salah Satu--</option>
                                                     <option>Bali</option>
-                                                    <option>Nusa Tenggara Barat</option>
-                                                    <option>Nusa Tenggara Timur</option>
+                                                    <option>Bangka Belitung</option>
+                                                    <option>Banten</option>
+                                                    <option>Bengkulu</option>
+                                                    <option>Daerah Istimewa Yogyakarta (DIY)</option>
+                                                    <option>DKI Jakarta</option>
+                                                    <option>Gorontalo</option>
+                                                    <option>Jambi</option>
+                                                    <option>Jawa Barat</option>
+                                                    <option>Jawa Tengah</option>
+                                                    <option>Jawa Timur</option>
                                                     <option>Kalimantan Barat</option>
                                                     <option>Kalimantan Tengah</option>
                                                     <option>Kalimantan Selatan</option>
                                                     <option>Kalimantan Timur</option>
                                                     <option>Kalimantan Utara</option>
-                                                    <option>Sulawesi Utara</option>
-                                                    <option>Gorontalo</option>
-                                                    <option>Sulawesi Tengah</option>
-                                                    <option>Sulawesi Selatan</option>
-                                                    <option>Sulawesi Barat</option>
-                                                    <option>Sulawesi Tenggara</option>
+                                                    <option>Kepulauan Riau</option>
+                                                    <option>Lampung</option>
                                                     <option>Maluku</option>
                                                     <option>Maluku utara</option>
+                                                    <option>Nanggroe Aceh Darussalam</option>
+                                                    <option>Nusa Tenggara Barat</option>
+                                                    <option>Nusa Tenggara Timur</option>
                                                     <option>Papua</option>
                                                     <option>Papua Barat</option>
+                                                    <option>Riau</option>
+                                                    <option>Sulawesi Barat</option>
+                                                    <option>Sulawesi Selatan</option>
+                                                    <option>Sulawesi Tengah</option>
+                                                    <option>Sulawesi Utara</option>
+                                                    <option>Sumatra Barat</option>
+                                                    <option>Sumatra Selatan</option>
+                                                    <option>Sulawesi Tenggara</option>
+                                                    <option>Sumatra Utara</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -143,7 +195,8 @@
                                               </div>
                                               <div class="modal-footer">
                                                 <button type="button" class="btn btn-danger btn-large" data-dismiss="modal">Tidak</button>
-                                                <input type="submit" class="btn btn-success btn-large" href="admindotambah.php" value="Ya. Simpan Data Baru">
+                                                <input type="hidden" id="doTambah" name="doTambah" value="1">
+                                                <input type="submit" class="btn btn-success btn-large" value="Ya. Simpan Data Baru">
                                               </div>
                                             </div>
                                           </div>

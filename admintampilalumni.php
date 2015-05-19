@@ -90,10 +90,14 @@
                                     </div>
                                     <center>
                                     <div style="margin-top:20px;">
-                                        <a class="btn btn-danger btn-large" href="adminlihat.html">Kembali</a>
-                                        <a class="btn btn-warning btn-large" href="adminsuntingalumni.html">Ubah Data Alumni</a>
+                                        <a class="btn btn-danger btn-large" href="adminlihat.php">Kembali ke Halaman Kelola Daftar Alumni</a>
+                                        <a class="btn btn-warning btn-large" onclick="document.getElementById('suntingForm').submit();">Ubah Data Alumni</a>
                                     </div>
                                     </center>
+                                    <form id="suntingForm" action="adminsuntingalumni.php" method="POST">
+                                        <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
+                                        <input type="hidden" id="doUpload" name="doUpload" value="0">
+                                    </form>
                                 </div>
                             </div>
                             <!--/.module-->
