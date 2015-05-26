@@ -78,13 +78,15 @@
                                         <div class="control-group">
                                             <label class="control-label" for="basicinput">Password</label>
                                             <div class="controls">
-                                                <input type="password" id="pass" name="pass" placeholder="Password untuk login" class="span8">
+                                                <input type="password" id="pass" name="pass" placeholder="Password untuk login" class="span8" onkeyup="checkPass(); return false;">
+                                                <br/><span id="confirmMessage1"></span>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label" for="basicinput">Ulangi Password</label>
                                             <div class="controls">
-                                                <input type="password" id="konfirmpass" name="konfirmpass" placeholder="Ulangi password" class="span8">
+                                                <input type="password" id="konfirmpass" name="konfirmpass" placeholder="Ulangi password" class="span8"  onkeyup="checkPass(); return false;">
+                                                <br/><span id="confirmMessage2"></span>
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -249,6 +251,34 @@
                 Copyright 2015 SMAN 1 Sidoarjo.
             </div>
         </div>
+        <script>
+            function checkPass()
+            {
+                var pass1 = document.getElementById('pass');
+                var pass2 = document.getElementById('konfirmpass');
+                var message = document.getElementById('confirmMessage2');
+                var message1 = document.getElementById('confirmMessage1');
+                var goodColor = "#66cc66";
+                var badColor = "#ff6666";
+                if ((pass1.value == "" && pass2.value == "") || pass2.value == ""){
+                    message.innerHTML = "";
+                    pass2.style.backgroundColor = "transparent";
+                }
+                else{    
+                    if(pass1.value == pass2.value){
+                        pass2.style.backgroundColor = goodColor;
+                        message.style.color = goodColor;
+                        message1.innerHTML = "";
+                        message.innerHTML = "Password yang dimasukkan sama!"
+                    }else{
+                        pass2.style.backgroundColor = badColor;
+                        message.style.color = badColor;
+                        message1.innerHTML = "";
+                        message.innerHTML = "Password yang dimasukkan tidak sama!"
+                    }
+                }
+            }
+        </script>
         <script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
         <script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
         <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>

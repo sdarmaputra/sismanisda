@@ -2,7 +2,7 @@
             <div class="navbar-inner">
                 <div class="container">
                     <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-inverse-collapse">
-                        <i class="icon-reorder shaded"></i></a><a class="brand" href="index.html">SI - SMANISDA</a>
+                        <i class="icon-reorder shaded"></i></a><a class="brand">SI - SMANISDA</a>
                     <div class="nav-collapse collapse navbar-inverse-collapse">
                         <ul class="nav pull-right">
                             <li class="nav-user dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -12,7 +12,7 @@
                                 <ul class="dropdown-menu">
                                     <li>
                                         <a href="#" onclick="document.getElementById('ubahForm').submit();">Pengaturan Profil</a>
-                                        <form id="ubahForm" action="adminsuntingprofil.php" method="POST">
+                                        <form id="ubahForm" action="alumnisuntingprofil.php" method="POST">
                                             <input type="hidden" name="doUpload" id="doUpload" value="0">
                                         </form>
                                     </li>

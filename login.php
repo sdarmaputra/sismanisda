@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Edmin</title>
+	<title>SI SMANISDA | Login</title>
 	<link type="text/css" href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
 	<link type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
 	<link type="text/css" href="css/theme.css" rel="stylesheet">
@@ -50,6 +50,27 @@
 				</div>
 			</div>
 		</div>
+										<!--modal-->
+                                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                          <div class="modal-dialog">
+                                            <div class="modal-content">
+                                              <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h3 class="modal-title" id="myModalLabel">Konfirmasi Perubahan</h3>
+                                              </div>
+                                              <div class="modal-body">
+                                                <h5>
+                                                Apakah anda yakin ingin menyimpan perubahan?
+                                                </h5>
+                                              </div>
+                                              <div class="modal-footer">
+                                                <button type="button" class="btn btn-danger btn-large" data-dismiss="modal">Tidak</button>
+                                                <a type="button" class="btn btn-success btn-large" href="#" onclick="document.getElementById('mainForm').submit();">Ya. Simpan Perubahan</a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <!--modal-->
 	</div><!--/.wrapper-->
 	<script src="scripts/jquery-1.9.1.min.js" type="text/javascript"></script>
 	<script src="scripts/jquery-ui-1.10.1.custom.min.js" type="text/javascript"></script>
